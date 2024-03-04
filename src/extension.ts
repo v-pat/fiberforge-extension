@@ -6,7 +6,20 @@ import * as child_process from 'child_process';
 export function activate(context: vscode.ExtensionContext) {
 
     let disposableSetup = vscode.commands.registerCommand('fiberforge.setup', async () => {
-        const extensionAssetsPath = context.asAbsolutePath('assets');
+
+		const os = process.platform;
+
+		let extensionAssetsPath;
+		if (os === 'win32') {
+			extensionAssetsPath = context.asAbsolutePath('assets/win');
+		} else if (os === 'darwin') {
+			extensionAssetsPath = context.asAbsolutePath('assets/mac');
+		} else if (os === 'linux') {
+			extensionAssetsPath = context.asAbsolutePath('assets/linux');
+		} else {
+			vscode.window.showErrorMessage("Operating system is not supported.");
+			return;
+		}
         const fiberforgePath = path.join(extensionAssetsPath, 'fiberforge.exe');
 
         const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
@@ -40,6 +53,21 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(disposableSetup);
 
     let disposableGenerate = vscode.commands.registerCommand('fiberforge.generate', async () => {
+
+		const os = process.platform;
+
+		let extensionAssetsPath;
+		if (os === 'win32') {
+			extensionAssetsPath = context.asAbsolutePath('assets/win');
+		} else if (os === 'darwin') {
+			extensionAssetsPath = context.asAbsolutePath('assets/mac');
+		} else if (os === 'linux') {
+			extensionAssetsPath = context.asAbsolutePath('assets/linux');
+		} else {
+			vscode.window.showErrorMessage("Operating system is not supported.");
+			return;
+		}
+
         // Show file picker dialog to select config file
         const configFileUri = await vscode.window.showOpenDialog({
             canSelectFiles: true,
@@ -57,8 +85,6 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
         const configFilePath = configFileUri[0].fsPath;
-
-        const extensionAssetsPath = context.asAbsolutePath('assets');
         const fiberforgePath = path.join(extensionAssetsPath, 'fiberforge.exe');
 
         const command = `"${fiberforgePath}" generate "${configFilePath}"`;

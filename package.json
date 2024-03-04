@@ -14,8 +14,12 @@
   "contributes": {
     "commands": [
       {
-        "command": "fiberforge.helloWorld",
-        "title": "Hello World"
+        "command": "fiberforge.setup",
+        "title": "FiberForge : Setup"
+      },
+      {
+        "command": "fiberforge.generate",
+        "title": "FiberForge : Generate"
       }
     ]
   },
