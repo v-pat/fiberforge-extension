@@ -1,71 +1,59 @@
-# fiberforge README
+# FiberForge
 
-This is the README for your extension "fiberforge". After writing up a brief description, we recommend including the following sections.
+FiberForge is a Visual Studio Code extension designed to streamline the process of setting up and generating code for GoFiber applications. With FiberForge, developers can quickly create backend projects and generate boilerplate code without the need for manual setup or command-line tools.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### FiberForge : Setup
 
-For example if there is an image subfolder under your extension project workspace:
+Effortlessly set up your GoFiber project by providing your application name (`<appName>`) and selecting your preferred database type (`<database>`).
 
-\!\[feature X\]\(images/feature-x.png\)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### FiberForge : Generate
+
+Easily generate boilerplate code for your GoFiber application by selecting a configuration file (txt or json) through a convenient file picker. The configuration file should follow a specific format-
+
+```
+{
+  "appName": "<APP_NAME>",
+  "database": "<mysql/postgres/mongodb>",
+  "tables": [
+    {
+      "name": "<TABLE_NAME>",
+      "columns": {
+        "FIRST_COLUMN_NAME": "<VALUE>",
+        "...": "...",
+        "NTH_COLUMN_NAME": "<VALUE>"
+      }
+    },
+    "...": "..."
+  ]
+}
+```
+Replace placeholders (<...>) with your actual project details. The appName represents the name of your GoFiber application, while the database specifies the type of database (MySQL, PostgreSQL, or MongoDB) in lowercase. The tables array contains objects representing tables or collections in your database. Each table object should include a name property for the table/collection name and a columns property defining the columns/fields of the table/collection.
+
+## Usage
+
+1. Open the command palette (Ctrl+Shift+P or Cmd+Shift+P on macOS).
+2. Type "FiberForge" to access the available commands.
+3. Choose either "FiberForge: Generate" or "FiberForge: Setup" to initiate the respective process.
+
+## Installation
+
+Install the FiberForge extension directly from the Visual Studio Code Marketplace to enhance your GoFiber development experience.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- Visual Studio Code
 
-## Extension Settings
+## Get Started
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+1. Install the FiberForge extension in Visual Studio Code.
+2. Use the provided commands to streamline your GoFiber project setup and code generation tasks directly within the editor.
 
-For example:
+## Contributions
 
-This extension contributes the following settings:
+Contributions and feedback are welcome! Feel free to submit issues or contribute enhancements via the [GitHub repository](<repository_link>).
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+Happy coding with FiberForge! 🚀
 
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
