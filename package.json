@@ -1,8 +1,14 @@
 {
   "name": "fiberforge",
   "displayName": "FiberForge",
+  "publisher": "v-pat",
   "description": "",
   "version": "0.0.1",
+  "icon": "assets/fiberforge-logo.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/v-pat/fiberforge-extension"
+  },
   "engines": {
     "vscode": "^1.87.0"
   },
