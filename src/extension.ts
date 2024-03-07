@@ -1,26 +1,11 @@
 
 import * as vscode from 'vscode';
-import * as path from 'path';
-import * as child_process from 'child_process';
 
 export function activate(context: vscode.ExtensionContext) {
 
     let disposableSetup = vscode.commands.registerCommand('fiberforge.setup', async () => {
 
-		const os = process.platform;
-
-		let extensionAssetsPath;
-		if (os === 'win32') {
-			extensionAssetsPath = context.asAbsolutePath('assets/win');
-		} else if (os === 'darwin') {
-			extensionAssetsPath = context.asAbsolutePath('assets/mac');
-		} else if (os === 'linux') {
-			extensionAssetsPath = context.asAbsolutePath('assets/linux');
-		} else {
-			vscode.window.showErrorMessage("Operating system is not supported.");
-			return;
-		}
-        const fiberforgePath = path.join(extensionAssetsPath, 'fiberforge.exe');
+        const os = process.platform;
 
         const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
         if (!workspaceFolder) {
@@ -34,13 +19,22 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        const dbName = await vscode.window.showInputBox({ placeHolder: "Enter database name" ,prompt:"Available databases are mongodb, mysql and postgres."});
+        const dbName = await vscode.window.showInputBox({ placeHolder: "Enter database name", prompt: "Available databases are mongodb, mysql and postgres." });
         if (!dbName) {
             vscode.window.showErrorMessage("Database name is required.");
             return;
         }
 
-        const command = `"${fiberforgePath}" setup --name="${name}" --db="${dbName}"`;
+        let command;
+        if (os === 'win32') {
+            command = `curl -LJO https://github.com/v-pat/fiberforge/releases/latest/download/fiberforge.exe && fiberforge.exe setup --name="${name}" --db="${dbName}" && del fiberforge.exe`;
+        } else if (os === 'darwin' || os === 'linux') {
+           command = `curl -LO https://github.com/v-pat/fiberforge/releases/latest/download/fiberforge && chmod +x fiberforge && ./fiberforge setup --name="${name}" --db="${dbName}" && rm fiberforge`;
+        } else {
+            vscode.window.showErrorMessage("Operating system is not supported.");
+            return;
+        }
+
 
         const terminal = vscode.window.createTerminal({
             name: "FiberForge Setup",
@@ -54,19 +48,8 @@ export function activate(context: vscode.ExtensionContext) {
 
     let disposableGenerate = vscode.commands.registerCommand('fiberforge.generate', async () => {
 
-		const os = process.platform;
-
-		let extensionAssetsPath;
-		if (os === 'win32') {
-			extensionAssetsPath = context.asAbsolutePath('assets/win');
-		} else if (os === 'darwin') {
-			extensionAssetsPath = context.asAbsolutePath('assets/mac');
-		} else if (os === 'linux') {
-			extensionAssetsPath = context.asAbsolutePath('assets/linux');
-		} else {
-			vscode.window.showErrorMessage("Operating system is not supported.");
-			return;
-		}
+        const os = process.platform;
+        
 
         // Show file picker dialog to select config file
         const configFileUri = await vscode.window.showOpenDialog({
@@ -78,16 +61,24 @@ export function activate(context: vscode.ExtensionContext) {
                 'JSON files': ['json']
             }
         });
-        
+
         if (!configFileUri || configFileUri.length === 0) {
             vscode.window.showErrorMessage("No config file selected.");
             return;
         }
 
         const configFilePath = configFileUri[0].fsPath;
-        const fiberforgePath = path.join(extensionAssetsPath, 'fiberforge.exe');
 
-        const command = `"${fiberforgePath}" generate "${configFilePath}"`;
+        let command;
+        if (os === 'win32') {
+            command = `curl -LJO https://github.com/v-pat/fiberforge/releases/latest/download/fiberforge.exe && fiberforge.exe generate ${configFilePath} && del fiberforge.exe`;
+        } else if (os === 'darwin' || os === 'linux') {
+           command = `curl -LO https://github.com/v-pat/fiberforge/releases/latest/download/fiberforge && chmod +x fiberforge && ./fiberforge generate ${configFilePath} && rm fiberforge`;
+        } else {
+            vscode.window.showErrorMessage("Operating system is not supported.");
+            return;
+        }
+
 
         const terminal = vscode.window.createTerminal({
             name: "FiberForge Generate",

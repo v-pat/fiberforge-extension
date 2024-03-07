@@ -2,8 +2,8 @@
   "name": "fiberforge",
   "displayName": "FiberForge",
   "publisher": "v-pat",
-  "description": "",
-  "version": "0.0.1",
+  "description": "FiberForge will create a backend setup or based on your input, even generate CRUD APIs for your tables/collections.",
+  "version": "0.0.2",
   "icon": "assets/fiberforge-logo.png",
   "repository": {
     "type": "git",
@@ -13,7 +13,8 @@
     "vscode": "^1.87.0"
   },
   "categories": [
-    "Other"
+   "Snippets",
+   "Formatters"
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
