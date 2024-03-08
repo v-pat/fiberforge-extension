@@ -45,6 +45,7 @@ Install the FiberForge extension directly from the Visual Studio Code Marketplac
 ## Requirements
 
 - Visual Studio Code
+- Go
 
 ## Get Started
 
