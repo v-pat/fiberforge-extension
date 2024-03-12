@@ -111,7 +111,18 @@ export function activate(context: vscode.ExtensionContext) {
             const { stdout, stderr } = await exec('go version');
             runSetup();
         } catch (error: any) {
-            vscode.window.showErrorMessage(`FiberForge requires Go installed to run commands. Please install Go from https://go.dev/dl/ and try again.`);
+            vscode.window.showWarningMessage('FiberForge requires Go installed to run commands. Do you want to install it?', 'Yes', 'No').then(async (selection) => {
+                if (selection === 'Yes') {
+                    let promise = await installGo();
+                    if(promise){
+                        runSetup();
+                    }else{
+                        return;
+                    }
+                } else {
+                    vscode.window.showErrorMessage("FiberForge requires Go installed to run commands. Please install Go and try again.");
+                }
+            });
         }
 
     });
@@ -124,8 +135,18 @@ export function activate(context: vscode.ExtensionContext) {
             const { stdout, stderr } = await exec('go version');
             runGenerate();
         } catch (error) {
-            vscode.window.showErrorMessage(`FiberForge requires Go installed to run commands. Please install Go from https://go.dev/dl/ and try again.`);
-
+            vscode.window.showWarningMessage('FiberForge requires Go installed to run commands. Do you want to install it?', 'Yes', 'No').then(async (selection) => {
+                if (selection === 'Yes') {
+                    let promise = await installGo();
+                    if (promise) {
+                        runGenerate();
+                    }else{
+                        return;
+                    }
+                } else {
+                    vscode.window.showErrorMessage("FiberForge requires Go installed to run commands. Please install Go and try again.");
+                }
+            });
         }
 
     });
