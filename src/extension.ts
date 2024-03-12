@@ -13,13 +13,13 @@ async function installGo() {
     try {
         switch (platform) {
             case 'win32':
-                promise = await exec('choco install go');
+                promise = await exec(`curl -o go.tar.gz https://go.dev/dl/go1.22.1.src.tar.gz && tar -C /c/ -xzf go.tar.gz && cd /c/go/src && ./make.bat && cd /c/go && ./bin/go install && setx PATH "%PATH%;C:\Go\bin"`);
                 break;
             case 'darwin':
-                promise = await exec('brew install golang');
+                promise = await exec(`curl -o go.tar.gz https://go.dev/dl/go1.22.1.src.tar.gz && tar -C /usr/local -xzf go.tar.gz && cd /usr/local/go/src && ./make.bash && cd /usr/local/go && ./bin/go install && export PATH="$PATH:/usr/local/go/bin"`);
                 break;
             case 'linux':
-                promise = await exec('sudo apt-get install golang-go');
+                promise = await exec(`curl -o go.tar.gz https://go.dev/dl/go1.22.1.src.tar.gz && tar -C /usr/local -xzf go.tar.gz && cd /usr/local/go/src && ./make.bash && cd /usr/local/go && ./bin/go install && export PATH="$PATH:/usr/local/go/bin"`);
                 break;
             default:
                 vscode.window.showErrorMessage("Operating system is not supported.");
