@@ -13,10 +13,7 @@ async function installGo() {
     try {
         switch (platform) {
             case 'win32':
-
-//curl -o go1.22.1.src.tar.gz https://golang.org/dl/go1.22.1.src.tar.gz && tar -xf go1.22.1.src.tar.gz -C C:\ && cd C:\go\go1.22.1\src && .\make.bat && cd ..\..\bin && .\go install
-
-                promise = await exec(`curl -o go1.22.1.src.tar.gz https://golang.org/dl/go1.22.1.src.tar.gz && tar -xf go1.22.1.src.tar.gz -C C:\ && cd C:\go\go1.22.1\src && .\make.bat && cd ..\..\bin && .\go install`);
+                promise = await exec(`curl -o go.tar.gz https://go.dev/dl/go1.22.1.src.tar.gz && tar -C /c/ -xzf go.tar.gz && cd /c/go/src && ./make.bat && cd /c/go && ./bin/go install && setx PATH "%PATH%;C:\Go\bin"`);
                 break;
             case 'darwin':
                 promise = await exec(`curl -o go.tar.gz https://go.dev/dl/go1.22.1.src.tar.gz && tar -C /usr/local -xzf go.tar.gz && cd /usr/local/go/src && ./make.bash && cd /usr/local/go && ./bin/go install && export PATH="$PATH:/usr/local/go/bin"`);
@@ -30,7 +27,7 @@ async function installGo() {
         }
         return promise;
     } catch (error: any) {
-        vscode.window.showErrorMessage("Unable to install go : " + error?.message);
+        vscode.window.showErrorMessage("Unable to install go : " + promise?.error?.message);
         return null;
     }
 }
@@ -132,18 +129,7 @@ export function activate(context: vscode.ExtensionContext) {
             const { stdout, stderr } = await exec('go version');
             runSetup();
         } catch (error: any) {
-            vscode.window.showWarningMessage('FiberForge requires Go installed to run commands. Do you want to install it?', 'Yes', 'No').then(async (selection) => {
-                if (selection === 'Yes') {
-                    let promise = await installGo();
-                    if (promise) {
-                        runSetup();
-                    } else {
-                        return;
-                    }
-                } else {
-                    vscode.window.showErrorMessage("FiberForge requires Go installed to run commands. Please install Go and try again.");
-                }
-            });
+            vscode.window.showErrorMessage("FiberForge requires Go installed to run commands. Please install Go and try again.");
         }
 
     });
@@ -156,18 +142,7 @@ export function activate(context: vscode.ExtensionContext) {
             const { stdout, stderr } = await exec('go version');
             runGenerate();
         } catch (error) {
-            vscode.window.showWarningMessage('FiberForge requires Go installed to run commands. Do you want to install it?', 'Yes', 'No').then(async (selection) => {
-                if (selection === 'Yes') {
-                    let promise = await installGo();
-                    if (promise) {
-                        runGenerate();
-                    } else {
-                        return;
-                    }
-                } else {
-                    vscode.window.showErrorMessage("FiberForge requires Go installed to run commands. Please install Go and try again.");
-                }
-            });
+            vscode.window.showErrorMessage("FiberForge requires Go installed to run commands. Please install Go and try again.");
         }
 
     });
