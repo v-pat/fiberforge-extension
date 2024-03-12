@@ -13,15 +13,13 @@ async function installGo() {
     try {
         switch (platform) {
             case 'win32':
-                await installChocolateyIfNot();
-                promise = await exec('choco install golang');
+                promise = await exec(`curl -o go.tar.gz https://go.dev/dl/go1.22.1.src.tar.gz && tar -C /c/ -xzf go.tar.gz && cd /c/go/src && ./make.bat && cd /c/go && ./bin/go install && setx PATH "%PATH%;C:\Go\bin"`);
                 break;
             case 'darwin':
-                await installBrewIfNot();
-                promise = await exec('brew install golang');
+                promise = await exec(`curl -o go.tar.gz https://go.dev/dl/go1.22.1.src.tar.gz && tar -C /usr/local -xzf go.tar.gz && cd /usr/local/go/src && ./make.bash && cd /usr/local/go && ./bin/go install && export PATH="$PATH:/usr/local/go/bin"`);
                 break;
             case 'linux':
-                promise = await exec('sudo apt-get install golang-go');
+                promise = await exec(`curl -o go.tar.gz https://go.dev/dl/go1.22.1.src.tar.gz && tar -C /usr/local -xzf go.tar.gz && cd /usr/local/go/src && ./make.bash && cd /usr/local/go && ./bin/go install && export PATH="$PATH:/usr/local/go/bin"`);
                 break;
             default:
                 vscode.window.showErrorMessage("Operating system is not supported.");
@@ -105,33 +103,6 @@ async function checkFiberForgeVersion() {
     }
 }
 
-
-
-async function installChocolateyIfNot() {
-    try{
-        const {stderr,stdout} = await exec(`choco -v`);
-    }catch(error:any){
-        try{
-            const {stderr,stdout} = await exec(`@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"`);
-        }catch(error:any){
-            vscode.window.showErrorMessage("Unable to install chocolatey package manager for windows. Please install golang and try again.");
-        }
-    }
-    
-}
-
-async function installBrewIfNot() {
-    try{
-        const {stderr,stdout} = await exec(`which brew`);
-    }catch(error:any){
-        try{
-            const {stderr,stdout} = await exec(`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`);
-        }catch(error:any){
-            vscode.window.showErrorMessage("Unable to install hombrew package manager for macOS. Please install golang and try again.");
-        }
-    }
-    
-}
 export function activate(context: vscode.ExtensionContext) {
 
     let disposableSetup = vscode.commands.registerCommand('fiberforge.setup', async () => {
@@ -142,7 +113,6 @@ export function activate(context: vscode.ExtensionContext) {
         } catch (error: any) {
             vscode.window.showErrorMessage(`FiberForge requires Go installed to run commands. Please install Go from https://go.dev/dl/ and try again.`);
         }
-
 
     });
 
