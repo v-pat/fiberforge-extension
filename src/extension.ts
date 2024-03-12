@@ -26,7 +26,7 @@ async function installGo() {
                 break;
         }
         return promise;
-    } catch (error:any) {
+    } catch (error: any) {
         vscode.window.showErrorMessage("Unable to install go : " + promise?.error?.message);
         return null;
     }
@@ -54,10 +54,20 @@ async function runSetup() {
     }
 
 
-    const terminal = vscode.window.createTerminal({
+    let terminal = vscode.window.createTerminal({
         name: "FiberForge Setup",
         cwd: workspaceFolder.uri.fsPath // Run the command in the workspace folder
     });
+
+    if (process.platform == 'win32') {
+        terminal = vscode.window.createTerminal({
+            name: "FiberForge Setup",
+            shellPath: 'C:/Windows/System32/cmd.exe',
+            cwd: workspaceFolder.uri.fsPath // Run the command in the workspace folder
+        });
+
+    }
+
     terminal.sendText(`${command} fiberforge setup --name="${name}" --db="${dbName}"`);
     terminal.show();
 }
@@ -85,10 +95,18 @@ async function runGenerate() {
 
     const configFilePath = configFileUri[0].fsPath;
 
-    const terminal = vscode.window.createTerminal({
+    let terminal = vscode.window.createTerminal({
         name: "FiberForge Generate",
         cwd: vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : undefined // Run the command in the workspace root directory if available
     });
+
+    if (process.platform == 'win32') {
+        terminal = vscode.window.createTerminal({
+            name: "FiberForge Setup",
+            shellPath: 'C:/Windows/System32/cmd.exe',
+            cwd: vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : undefined // Run the command in the workspace root directory if available
+        });
+    }
 
     terminal.sendText(`${command} fiberforge generate "${configFilePath}"`);
     terminal.show();
@@ -114,9 +132,9 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.window.showWarningMessage('FiberForge requires Go installed to run commands. Do you want to install it?', 'Yes', 'No').then(async (selection) => {
                 if (selection === 'Yes') {
                     let promise = await installGo();
-                    if(promise){
+                    if (promise) {
                         runSetup();
-                    }else{
+                    } else {
                         return;
                     }
                 } else {
@@ -140,7 +158,7 @@ export function activate(context: vscode.ExtensionContext) {
                     let promise = await installGo();
                     if (promise) {
                         runGenerate();
-                    }else{
+                    } else {
                         return;
                     }
                 } else {
