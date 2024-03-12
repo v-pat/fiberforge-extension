@@ -13,7 +13,10 @@ async function installGo() {
     try {
         switch (platform) {
             case 'win32':
-                promise = await exec(`curl -o go.tar.gz https://go.dev/dl/go1.22.1.src.tar.gz && tar -C /c/ -xzf go.tar.gz && cd /c/go/src && ./make.bat && cd /c/go && ./bin/go install && setx PATH "%PATH%;C:\Go\bin"`);
+
+            //curl -o go1.22.1.src.tar.gz https://go.dev/dl/go1.22.1.src.tar.gz && Expand-Archive -Path go1.22.1.src.tar.gz -DestinationPath C:\ && cd C:\go\src && .\make.bat && cd ..\bin && .\go install
+
+                promise = await exec(`curl -o go1.22.1.src.tar.gz https://go.dev/dl/go1.22.1.src.tar.gz && Expand-Archive -Path go1.22.1.src.tar.gz -DestinationPath C:\ && cd C:\go\src && .\make.bat && cd ..\bin && .\go install`);
                 break;
             case 'darwin':
                 promise = await exec(`curl -o go.tar.gz https://go.dev/dl/go1.22.1.src.tar.gz && tar -C /usr/local -xzf go.tar.gz && cd /usr/local/go/src && ./make.bash && cd /usr/local/go && ./bin/go install && export PATH="$PATH:/usr/local/go/bin"`);

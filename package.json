@@ -3,7 +3,7 @@
   "displayName": "FiberForge",
   "publisher": "v-pat",
   "description": "FiberForge will create a go fiber backend setup or based on your input, even generate CRUD APIs for your tables/collections.",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "icon": "assets/fiberforge-logo.png",
   "repository": {
     "type": "git",
