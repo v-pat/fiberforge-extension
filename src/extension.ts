@@ -30,7 +30,7 @@ async function installGo() {
         }
         return promise;
     } catch (error: any) {
-        vscode.window.showErrorMessage("Unable to install go : " + promise?.error?.message);
+        vscode.window.showErrorMessage("Unable to install go : " + error?.message);
         return null;
     }
 }
